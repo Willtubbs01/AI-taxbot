@@ -1,12 +1,16 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "taxmoe"
 version = "0.1.0"
+description = "Stage 3 TaxMoE dataset pipeline foundation"
 requires-python = ">=3.11"
-
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0",
-    "mypy>=1.0",
-    "ruff>=0.6",
+dependencies = [
+  "pydantic>=2.8,<3",
+  "PyYAML>=6.0.2,<7",
 ]
+
+[tool.setuptools.packages.find]
+where = ["src"]
