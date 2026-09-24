@@ -1,0 +1,19 @@
+{
+  "build_id": "BUILD-2500110fe1530a66cae1",
+  "build_name": "taxmoe_smoke",
+  "spec_hash": "2500110fe1530a66cae1c2d5d0504ce3e3a272893f4516e27095d58adaa7b586",
+  "created_at": "2026-09-24T05:04:45.481241Z",
+  "updated_at": "2026-09-24T05:04:45.481241Z",
+  "stages": {
+    "prepare": "complete",
+    "generate": "complete",
+    "mutate": "complete",
+    "split": "complete",
+    "validate": "complete",
+    "export": "complete",
+    "report": "complete"
+  },
+  "current_stage": null,
+  "passed_validation": true,
+  "export_id": "EXPORT-f122aaa85f82da367811"
+}

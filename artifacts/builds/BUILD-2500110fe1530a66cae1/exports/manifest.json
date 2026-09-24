@@ -1,0 +1,98 @@
+[
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\test_id\\tax_analyze_tax_scenario.jsonl",
+    "records": 40,
+    "bytes": 111636,
+    "sha256": "40b3cd26428da4db88ef3531fa5cc1be64aa6fafa5001c7cfc09daecb70588d1"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\test_id\\tax_identify_missing_information.jsonl",
+    "records": 40,
+    "bytes": 112916,
+    "sha256": "a1f6ba611760be327f9bf3f2cd096ef2d335b12f684691a7c84f784ab52cc082"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\test_id\\tax_identify_return_forms.jsonl",
+    "records": 40,
+    "bytes": 111796,
+    "sha256": "aaa29bc6a8677854db93cad8d6248a1accff84d7094002dbbd33fea4d0dddfd8"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\test_id\\tax_identify_source_documents.jsonl",
+    "records": 40,
+    "bytes": 112436,
+    "sha256": "6e7ee52f12c2cd29226a801b70f4615516d1d967a2cf5b4f7c2ac7d86b7174aa"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\test_id\\tax_identify_topics.jsonl",
+    "records": 40,
+    "bytes": 110836,
+    "sha256": "2440bfddde1d47f29ec2ba285aebe4e52de454cac1d5145c090377a4e64185a2"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\test_id\\tax_plan_calculations.jsonl",
+    "records": 40,
+    "bytes": 111156,
+    "sha256": "35fd57f715abb7fbd7eb5efa4ade81f5603f27a901d32b721e29a9d597da084d"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\train\\tax_analyze_tax_scenario.jsonl",
+    "records": 60,
+    "bytes": 127856,
+    "sha256": "b3a0b664de5a6216578c657d86dbc3f07ea9a32c1284a89e16b4bf22ecbabc85"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\train\\tax_identify_missing_information.jsonl",
+    "records": 40,
+    "bytes": 92754,
+    "sha256": "6ff13b6e1862bb4fba07fbdd9d218d29646728ab26689c91d924326f06d2ba51"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\train\\tax_identify_return_forms.jsonl",
+    "records": 60,
+    "bytes": 128096,
+    "sha256": "5c2a21b986325fc7bacdc50170af1880136888d13e6d76b912de02f3c67e55bf"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\train\\tax_identify_source_documents.jsonl",
+    "records": 60,
+    "bytes": 129056,
+    "sha256": "1ae41edf3887de6f58e345bccc7836560d531bd462128f649f937f9be602c147"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\train\\tax_identify_topics.jsonl",
+    "records": 60,
+    "bytes": 126656,
+    "sha256": "171f34967dfbdb95c0980be957ec85063456567fd299b5477d1a9bf106dee131"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\train\\tax_plan_calculations.jsonl",
+    "records": 40,
+    "bytes": 90994,
+    "sha256": "38f7e784eac33b9ad869952aff4476b426b579f39953dd9ce96bc22f9f20ace2"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\validation\\tax_analyze_tax_scenario.jsonl",
+    "records": 40,
+    "bytes": 123276,
+    "sha256": "a6bce87f57a434aba59dd63d240ff0951a35072fbe5da03e3cb709b4aa2123c0"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\validation\\tax_identify_missing_information.jsonl",
+    "records": 40,
+    "bytes": 124556,
+    "sha256": "e54d4782d1a4be4b1b12757e8701f3d74d06cea261f7e3fe3ec1d678ea39fa9a"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\validation\\tax_identify_topics.jsonl",
+    "records": 40,
+    "bytes": 122476,
+    "sha256": "d6d30f90cb36955fbb1e35060b94aea90db8b5482379efecf5060e3824a0f8e8"
+  },
+  {
+    "path": "C:\\Users\\wilso\\OneDrive\\Desktop\\projects\\Tax_AI\\artifacts\\builds\\BUILD-2500110fe1530a66cae1\\exports\\validation\\tax_plan_calculations.jsonl",
+    "records": 40,
+    "bytes": 122796,
+    "sha256": "e42c98ee462d069ea909461aa2c5b06f21d5e7c26277082f19e01a496befd652"
+  }
+]

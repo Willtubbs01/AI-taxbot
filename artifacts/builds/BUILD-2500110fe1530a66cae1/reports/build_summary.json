@@ -1,0 +1,11 @@
+{
+  "base_scenarios": 40,
+  "build_id": "BUILD-2500110fe1530a66cae1",
+  "export_id": "EXPORT-f122aaa85f82da367811",
+  "exported_examples": 720,
+  "mutated_scenarios": 30,
+  "name": "taxmoe_smoke",
+  "spec_hash": "2500110fe1530a66cae1c2d5d0504ce3e3a272893f4516e27095d58adaa7b586",
+  "total_scenarios": 70,
+  "validation_passed": true
+}

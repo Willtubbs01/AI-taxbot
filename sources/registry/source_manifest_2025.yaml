@@ -5,7 +5,7 @@ sources:
     title: 2025 Form W-2
     url: https://www.irs.gov/forms-pubs/about-form-w-2
     raw_path: sources/raw/2025/form_w2.pdf
-    sha256: REPLACE_ME
+    sha256: 6A52AD63693DE54220A3326B22C4D0FB34F4C25084366537087312975A55AE96
     document_type: official_form
     authority_class: official_form
     tax_year: 2025
@@ -16,7 +16,7 @@ sources:
     title: 2025 Form 1040
     url: https://www.irs.gov/forms-pubs/about-form-1040
     raw_path: sources/raw/2025/form_1040.pdf
-    sha256: REPLACE_ME
+    sha256: 3D31C226DF0D189CED80E039D01CF0F8820C1019681A0F0CA6264DE277B7E982
     document_type: official_form
     authority_class: official_form
     tax_year: 2025
@@ -27,7 +27,7 @@ sources:
     title: 2025 Form 1099-B
     url: https://www.irs.gov/forms-pubs/about-form-1099-b
     raw_path: sources/raw/2025/form_1099b.pdf
-    sha256: REPLACE_ME
+    sha256: 31FB17392ADD548510BC618D64BB525BB36FB35BABB59048D9427D13276CC64E
     document_type: official_form
     authority_class: official_form
     tax_year: 2025
@@ -38,7 +38,7 @@ sources:
     title: 2025 Form 8949
     url: https://www.irs.gov/forms-pubs/about-form-8949
     raw_path: sources/raw/2025/form_8949.pdf
-    sha256: REPLACE_ME
+    sha256: 274513891E4E281D11E14286F14B9DF724C24B6030FCA0F0681DA64FB2E7F525
     document_type: official_form
     authority_class: official_form
     tax_year: 2025
@@ -49,7 +49,7 @@ sources:
     title: 2025 Schedule D
     url: https://www.irs.gov/forms-pubs/about-schedule-d-form-1040
     raw_path: sources/raw/2025/schedule_d.pdf
-    sha256: REPLACE_ME
+    sha256: 90564C8B7E49280363612639B804D113EBEDB516C2E87C70649F29C844DA1D2E
     document_type: official_form
     authority_class: official_form
     tax_year: 2025
