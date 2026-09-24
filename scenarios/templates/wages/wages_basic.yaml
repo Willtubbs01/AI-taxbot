@@ -1,0 +1,39 @@
+template:
+  template_id: TPL-WAGES-BASIC
+  revision: 1
+  name: Basic wages
+  template_type: base
+  supported_tax_years: [2025]
+  domain_ids: [income.wages]
+  task_ids:
+    - identify_topics
+    - identify_source_documents
+    - identify_return_forms
+    - analyze_tax_scenario
+  variables:
+    - variable_id: wages
+      concept_id: income.wages
+      value_type: money
+      generator:
+        type: money_range
+        min: 1000000
+        max: 15000000
+        step: 10000
+      mutation_tags: [removable]
+    - variable_id: withholding
+      concept_id: payment.federal_withholding
+      value_type: money
+      generator:
+        type: money_range
+        min: 0
+        max: 3000000
+        step: 1000
+      mutation_tags: [removable]
+  documents:
+    - document_id: wage_statement
+      form_id: FORM-W2
+      variable_refs: [wages, withholding]
+  required_rule_ids: [RULE-WAGES-BASIC-2025]
+  generation:
+    max_attempts: 20
+    require_complete_base_scenario: true

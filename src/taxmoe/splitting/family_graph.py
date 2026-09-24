@@ -1,12 +1,9 @@
-class UnionFind:
+class DisjointSet:
     def __init__(self):
         self.parent = {}
-        self.rank = {}
 
     def add(self, x):
-        if x not in self.parent:
-            self.parent[x] = x
-            self.rank[x] = 0
+        self.parent.setdefault(x, x)
 
     def find(self, x):
         self.add(x)
@@ -16,10 +13,11 @@ class UnionFind:
 
     def union(self, a, b):
         ra, rb = self.find(a), self.find(b)
-        if ra == rb:
-            return
-        if self.rank[ra] < self.rank[rb]:
-            ra, rb = rb, ra
-        self.parent[rb] = ra
-        if self.rank[ra] == self.rank[rb]:
-            self.rank[ra] += 1
+        if ra != rb:
+            self.parent[rb] = ra
+
+    def groups(self):
+        out = {}
+        for x in list(self.parent):
+            out.setdefault(self.find(x), []).append(x)
+        return list(out.values())

@@ -1,113 +1,84 @@
 from __future__ import annotations
-
-import json
 from collections import defaultdict
-from pathlib import Path
-
-from taxmoe.schemas.common import stable_hash
+from taxmoe.ingestion.hashing import stable_hash
 from taxmoe.schemas.enums import DatasetSplit
-from taxmoe.schemas.example import TrainingExample
+from taxmoe.schemas.example import ExampleLineage, TrainingExample
+from taxmoe.schemas.manifest import SplitManifest
 from taxmoe.schemas.scenario import TaxScenario
-from taxmoe.splitting.splitter import SplitAssignment
-
+from .adapters.qwen import to_qwen_messages
+from .renderers.structured import StructuredRenderer
+from .renderers.concise import ConciseRenderer
+from .jsonl import write_jsonl
 
 class DatasetExporter:
-    VERSION = "0.1"
-
-    SYSTEM = (
-        "You are a specialized U.S. federal individual-income-tax reasoning component. "
-        "Analyze only the provided task and facts. Do not invent missing taxpayer information."
-    )
-
-    def build_example(
-        self,
-        scenario: TaxScenario,
-        cluster_id: str,
-        split: DatasetSplit,
-        task_id: str,
-    ) -> TrainingExample:
-        task_analysis = next(a for a in scenario.analysis.task_analyses if a.task_id == task_id)
-        user_payload = {
-            "task": task_id,
-            "jurisdiction": scenario.input.jurisdiction,
-            "tax_year": scenario.input.tax_year,
-            "facts": [
-                {
-                    "concept_id": f.concept_id,
-                    "state": f.state.value,
-                    "value": f.value.model_dump(mode="json") if f.value else None,
-                    "event_id": str(f.event_id) if f.event_id else None,
-                }
-                for f in scenario.input.facts
-            ],
-            "documents": [
-                {"form_id": d.form_id, "form_version_id": d.form_version_id}
-                for d in scenario.input.documents
-            ],
-            "context": [c.model_dump(mode="json") for c in scenario.input.context_items],
+    def __init__(self, exporter_version: str = "0.1"):
+        self.exporter_version = exporter_version
+        self.renderers = {
+            "structured": StructuredRenderer(),
+            "concise": ConciseRenderer(),
         }
-        assistant_payload = {
-            "status": task_analysis.status.value,
-            "topics": task_analysis.active_concept_ids,
-            "missing_information": task_analysis.missing_fact_ids,
-            "required_rule_lookups": task_analysis.required_rule_lookups,
-            "calculation_requests": task_analysis.required_calculations,
-            "candidate_forms": task_analysis.candidate_forms,
-            "required_forms": task_analysis.required_forms,
-        }
-        example_id = f"EXAMPLE-{stable_hash(scenario.scenario_id, task_id, cluster_id, self.VERSION)[:20]}"
-        return TrainingExample(
-            example_id=example_id,
-            scenario_id=str(scenario.scenario_id),
-            family_id=str(scenario.family_id),
-            cluster_id=cluster_id,
-            task_id=task_id,
-            dataset_family=f"tax_{task_id}",
-            split=split,
-            messages=[
-                {"role": "system", "content": self.SYSTEM},
-                {"role": "user", "content": json.dumps(user_payload, sort_keys=True, separators=(",", ":"))},
-                {"role": "assistant", "content": json.dumps(assistant_payload, sort_keys=True, separators=(",", ":"))},
-            ],
-            metadata={"origin": scenario.origin.value, "tax_year": scenario.input.tax_year},
-        )
 
-    def export(
-        self,
-        scenarios: list[TaxScenario],
-        cluster_of: dict[str, str],
-        assignments: dict[str, SplitAssignment],
-        output_dir: str | Path,
-    ) -> dict[str, Path]:
-        output_dir = Path(output_dir)
-        output_dir.mkdir(parents=True, exist_ok=True)
-        records: dict[str, list[TrainingExample]] = defaultdict(list)
-        seen: set[str] = set()
-        prompt_targets: dict[str, str] = {}
+    def build_examples(self, scenarios: list[TaxScenario], split_manifest: SplitManifest, renderers=("structured",)):
+        cluster_split = {a.cluster_id: a.split for a in split_manifest.assignments}
+        examples = []
+        visible_input_to_target = {}
 
-        for scenario in scenarios:
-            sid = str(scenario.scenario_id)
-            cluster_id = cluster_of[sid]
-            split = assignments[cluster_id].split
-            for analysis in scenario.analysis.task_analyses:
-                example = self.build_example(scenario, cluster_id, split, analysis.task_id)
-                prompt = "\n".join(m["content"] for m in example.messages[:-1])
-                target = example.messages[-1]["content"]
-                prompt_hash = stable_hash(prompt)
-                if prompt_hash in prompt_targets and prompt_targets[prompt_hash] != target:
-                    raise ValueError(f"EXPORT-TARGET-CONFLICT for prompt hash {prompt_hash}")
-                prompt_targets[prompt_hash] = target
-                full_hash = stable_hash(prompt, target)
-                if full_hash in seen:
-                    continue
-                seen.add(full_hash)
-                records[split.value].append(example)
+        for s in scenarios:
+            cluster_id = split_manifest.scenario_to_cluster[s.scenario_id]
+            split = DatasetSplit(cluster_split[cluster_id])
+            for task in s.analysis.task_analyses:
+                for renderer_id in renderers:
+                    renderer = self.renderers[renderer_id]
+                    user_text, target_text = renderer.render(s, task.task_id)
 
-        outputs: dict[str, Path] = {}
-        for split_name, examples in records.items():
-            path = output_dir / f"{split_name}.jsonl"
-            with path.open("w", encoding="utf-8", newline="\n") as f:
-                for example in sorted(examples, key=lambda x: x.example_id):
-                    f.write(json.dumps(example.model_dump(mode="json"), sort_keys=True, ensure_ascii=False) + "\n")
-            outputs[split_name] = path
-        return outputs
+                    input_hash = stable_hash(user_text)
+                    target_hash = stable_hash(target_text)
+                    previous = visible_input_to_target.get(input_hash)
+                    if previous is not None and previous != target_hash:
+                        raise RuntimeError("EXPORT-TARGET-CONFLICT: same visible input has incompatible targets")
+                    visible_input_to_target[input_hash] = target_hash
+
+                    example_id = f"EXAMPLE-{stable_hash(s.scenario_id, task.task_id, renderer_id, renderer.version)[:24]}"
+                    lineage = ExampleLineage(
+                        scenario_id=s.scenario_id,
+                        scenario_content_hash=s.content_hash,
+                        task_id=task.task_id,
+                        renderer_id=renderer_id,
+                        renderer_version=renderer.version,
+                        exporter_version=self.exporter_version,
+                        split_version=split_manifest.split_version,
+                    )
+                    examples.append(TrainingExample(
+                        example_id=example_id,
+                        scenario_id=s.scenario_id,
+                        family_id=s.family_id,
+                        cluster_id=cluster_id,
+                        task_id=task.task_id,
+                        dataset_family=f"tax_{task.task_id}",
+                        split=split,
+                        messages=to_qwen_messages(user_text, target_text),
+                        metadata={
+                            "tax_year": s.input.tax_year,
+                            "origin": s.origin.value,
+                            "renderer_id": renderer_id,
+                        },
+                        lineage=lineage,
+                    ))
+        # exact record dedup
+        unique = {}
+        for e in examples:
+            h = stable_hash(e.messages, e.task_id, e.split.value)
+            unique.setdefault(h, e)
+        return sorted(unique.values(), key=lambda e: e.example_id)
+
+    def export(self, examples: list[TrainingExample], output_root):
+        groups = defaultdict(list)
+        for e in examples:
+            groups[(e.split.value, e.dataset_family)].append(e)
+
+        results = []
+        for (split, family), rows in sorted(groups.items()):
+            data = [x.model_dump(mode="json") for x in rows]
+            path = output_root / split / f"{family}.jsonl"
+            results.append(write_jsonl(path, data))
+        return results

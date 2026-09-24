@@ -1,18 +1,17 @@
 from pathlib import Path
-import hashlib
-import json
+from taxmoe.ingestion.hashing import sha256_file
+from .models import DatasetReleaseManifest
 
-
-def verify_release(root: str | Path) -> list[str]:
-    root = Path(root)
-    manifest = json.loads((root / "release_manifest.json").read_text(encoding="utf-8"))
-    issues = []
-    for entry in manifest.get("files", []):
-        path = root / entry["path"]
-        if not path.exists():
-            issues.append(f"MISSING:{entry['path']}")
-            continue
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        if digest != entry["sha256"]:
-            issues.append(f"HASH-MISMATCH:{entry['path']}")
-    return issues
+def verify_release(path: str | Path) -> dict:
+    root = Path(path)
+    manifest = DatasetReleaseManifest.model_validate_json(
+        (root / "release_manifest.json").read_text(encoding="utf-8")
+    )
+    failures = []
+    for rec in manifest.files:
+        p = root / rec.path
+        if not p.exists():
+            failures.append({"path": rec.path, "reason": "missing"})
+        elif sha256_file(p) != rec.sha256:
+            failures.append({"path": rec.path, "reason": "hash_mismatch"})
+    return {"passed": not failures, "failures": failures, "release_id": manifest.release_id}

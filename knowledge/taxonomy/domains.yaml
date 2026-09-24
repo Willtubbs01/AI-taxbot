@@ -1,0 +1,20 @@
+version: "0.1"
+concepts:
+  taxpayer.filing_status:
+    domain: taxpayer
+  income.wages:
+    domain: income
+  payment.federal_withholding:
+    domain: payment
+  investment.disposition:
+    domain: investment
+  investment.proceeds:
+    domain: investment
+  investment.basis:
+    domain: investment
+  investment.acquisition_date:
+    domain: investment
+  investment.disposition_date:
+    domain: investment
+  investment.capital_gain_loss:
+    domain: investment

@@ -1,0 +1,22 @@
+rules:
+  - rule_id: RULE-WAGES-BASIC-2025
+    revision: 1
+    name: Basic wage pathway
+    category: wages
+    tax_years: [2025]
+    conditions:
+      - concept_id: income.wages
+        operator: EXISTS
+    effects:
+      - effect_type: ADD_TOPIC
+        target: income.wages
+      - effect_type: SOURCE_DOCUMENT
+        target: FORM-W2
+      - effect_type: CANDIDATE_FORM
+        target: FORM-1040
+    source_refs: []
+    status: verified
+    completeness: complete
+    scenario_generation_allowed: true
+    quality: Q3
+    review: R1

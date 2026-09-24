@@ -1,30 +1,25 @@
-from __future__ import annotations
-import json
 from pathlib import Path
-from taxmoe.schemas.source import SourceRecord
-
+import yaml
+from taxmoe.schemas.source import SourceManifest
 
 class SourceRegistry:
-    def __init__(self, records: list[SourceRecord] | None = None):
-        self._records = {str(r.source_id): r for r in (records or [])}
+    def __init__(self, manifest: SourceManifest):
+        self.manifest = manifest
+        self._by_id = {s.source_id: s for s in manifest.sources}
 
-    def add(self, record: SourceRecord) -> None:
-        key = str(record.source_id)
-        if key in self._records:
-            raise ValueError(f"Duplicate source_id: {key}")
-        self._records[key] = record
+    @classmethod
+    def from_yaml(cls, path: str | Path) -> "SourceRegistry":
+        data = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+        return cls(SourceManifest.model_validate(data))
 
-    def get(self, source_id: str) -> SourceRecord | None:
-        return self._records.get(source_id)
+    def get(self, source_id: str):
+        return self._by_id.get(source_id)
 
-    def require(self, source_id: str) -> SourceRecord:
-        record = self.get(source_id)
-        if record is None:
-            raise KeyError(source_id)
-        return record
+    def require(self, source_id: str):
+        value = self.get(source_id)
+        if value is None:
+            raise KeyError(f"Unknown source_id: {source_id}")
+        return value
 
-    def save_jsonl(self, path: str | Path) -> None:
-        path = Path(path); path.parent.mkdir(parents=True, exist_ok=True)
-        with path.open("w", encoding="utf-8") as f:
-            for key in sorted(self._records):
-                f.write(json.dumps(self._records[key].model_dump(mode="json"), sort_keys=True) + "\n")
+    def all(self):
+        return list(self._by_id.values())

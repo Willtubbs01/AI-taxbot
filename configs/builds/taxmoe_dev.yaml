@@ -1,0 +1,31 @@
+build:
+  name: taxmoe_dev
+
+  build_version: "0.1"
+  seed: 42017
+  tax_year: 2025
+  source_manifest: sources/registry/source_manifest_2025.yaml
+  taxonomy_domains: knowledge/taxonomy/domains.yaml
+  taxonomy_tasks: knowledge/taxonomy/tasks.yaml
+  forms: knowledge/forms/forms.yaml
+  form_versions: knowledge/forms/form_versions_2025.yaml
+  rule_files:
+    - knowledge/rules/wages_2025.yaml
+    - knowledge/rules/investment_2025.yaml
+  value_store: knowledge/values/values_2025.yaml
+  template_files:
+    - scenarios/templates/wages/wages_basic.yaml
+    - scenarios/templates/investments/stock_sale_basic.yaml
+    - scenarios/templates/mixed/wages_stock_basic.yaml
+    - scenarios/templates/investments/stock_sale_two_transactions.yaml
+  mutation_config: configs/mutations/mutations_v0.1.yaml
+  split_config: configs/splitting/split_v1.yaml
+  validation_policy: configs/validation/quality_v1.yaml
+  export_config: configs/exports/qwen_v1.yaml
+  validation_mode: full
+
+  templates:
+    - {id: TPL-WAGES-BASIC, count: 125}
+    - {id: TPL-STOCK-SALE-BASIC, count: 175}
+    - {id: TPL-WAGES-PLUS-STOCK, count: 125}
+    - {id: TPL-STOCK-SALE-TWO-TRANSACTIONS, count: 75}

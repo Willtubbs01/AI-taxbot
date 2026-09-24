@@ -1,0 +1,5 @@
+exporter_version: "0.1"
+adapter: qwen_chat
+renderers:
+  - structured
+  - concise

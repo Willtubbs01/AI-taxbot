@@ -1,13 +1,8 @@
-"""Minimal CLI entrypoint.
+import typer
+from .dataset import app as dataset_app
 
-Install Typer and expand this module if you want the richer command tree designed
-in Stage 3. The core build APIs do not depend on CLI tooling.
-"""
-
-
-def main() -> None:
-    print("TaxMoE 0.1 — use the Python build APIs in taxmoe.builds.runner")
-
+app = typer.Typer(help="TaxMoE command line interface.")
+app.add_typer(dataset_app, name="dataset")
 
 if __name__ == "__main__":
-    main()
+    app()

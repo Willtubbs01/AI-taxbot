@@ -1,69 +1,61 @@
 from __future__ import annotations
-
 from collections import defaultdict
-
-from pydantic import Field
-
-from taxmoe.schemas.common import TaxMoEModel, stable_hash
+from taxmoe.ingestion.hashing import stable_hash, stable_int
+from taxmoe.schemas.manifest import SplitManifest, SplitAssignment
 from taxmoe.schemas.enums import DatasetSplit
 from taxmoe.schemas.scenario import TaxScenario
-
-
-class SplitAssignment(TaxMoEModel):
-    cluster_id: str
-    split: DatasetSplit
-
-
-class SplitConfig(TaxMoEModel):
-    version: str = "v1"
-    seed: int = 42017
-    train_fraction: float = 0.8
-    validation_fraction: float = 0.1
-    test_fraction: float = 0.1
-    reserved_clusters: dict[str, DatasetSplit] = Field(default_factory=dict)
-
+from .family_graph import DisjointSet
 
 class SplitEngine:
-    def __init__(self, config: SplitConfig):
-        total = config.train_fraction + config.validation_fraction + config.test_fraction
-        if abs(total - 1.0) > 1e-9:
-            raise ValueError("Standard split fractions must sum to 1")
-        self.config = config
+    def __init__(self, seed: int = 42017, split_version: str = "v1", clustering_version: str = "v1"):
+        self.seed = seed
+        self.split_version = split_version
+        self.clustering_version = clustering_version
 
-    def build_clusters(self, scenarios: list[TaxScenario]) -> dict[str, list[TaxScenario]]:
-        # v0.1 cluster key = structural fingerprint. Family siblings therefore stay together
-        # when their structural fingerprint is shared; explicit family union closes the rest.
-        family_to_structures: dict[str, set[str]] = defaultdict(set)
-        for s in scenarios:
-            family_to_structures[str(s.family_id)].add(s.structural_fingerprint)
+    def build(self, scenarios: list[TaxScenario]) -> SplitManifest:
+        ds = DisjointSet()
+        by_family = defaultdict(list)
+        by_struct = defaultdict(list)
 
-        # Families linked to multiple structures get a family-derived cluster key so mutations
-        # cannot leak across splits.
-        clusters: dict[str, list[TaxScenario]] = defaultdict(list)
         for s in scenarios:
-            structures = family_to_structures[str(s.family_id)]
-            if len(structures) > 1:
-                key = stable_hash("family", str(s.family_id))
-            else:
-                key = next(iter(structures))
+            ds.add(s.scenario_id)
+            by_family[s.family_id].append(s.scenario_id)
+            by_struct[s.structural_fingerprint].append(s.scenario_id)
+
+        for group in list(by_family.values()) + list(by_struct.values()):
+            for x in group[1:]:
+                ds.union(group[0], x)
+
+        groups = ds.groups()
+        scenario_to_cluster = {}
+        assignments = []
+
+        for group in groups:
+            key = stable_hash(sorted(group))
             cluster_id = f"CLUSTER-{key[:20]}"
-            clusters[cluster_id].append(s)
-        return dict(clusters)
+            for sid in group:
+                scenario_to_cluster[sid] = cluster_id
 
-    def assign(self, clusters: dict[str, list[TaxScenario]]) -> dict[str, SplitAssignment]:
-        out: dict[str, SplitAssignment] = {}
-        train_cut = self.config.train_fraction
-        val_cut = train_cut + self.config.validation_fraction
-        for cluster_id in sorted(clusters):
-            if cluster_id in self.config.reserved_clusters:
-                split = self.config.reserved_clusters[cluster_id]
+            bucket = stable_int(self.split_version, self.seed, cluster_id) % 10000
+            if bucket < 8000:
+                split = DatasetSplit.TRAIN
+            elif bucket < 9000:
+                split = DatasetSplit.VALIDATION
             else:
-                value = int(stable_hash(self.config.version, self.config.seed, cluster_id)[:12], 16) / float(16**12)
-                if value < train_cut:
-                    split = DatasetSplit.TRAIN
-                elif value < val_cut:
-                    split = DatasetSplit.VALIDATION
-                else:
-                    split = DatasetSplit.TEST_ID
-            out[cluster_id] = SplitAssignment(cluster_id=cluster_id, split=split)
-        return out
+                split = DatasetSplit.TEST_ID
+
+            assignments.append(SplitAssignment(
+                cluster_id=cluster_id,
+                split=split.value,
+                split_version=self.split_version,
+                split_seed=self.seed,
+            ))
+
+        return SplitManifest(
+            split_version=self.split_version,
+            clustering_version=self.clustering_version,
+            dedup_version="v1",
+            seed=self.seed,
+            scenario_to_cluster=scenario_to_cluster,
+            assignments=sorted(assignments, key=lambda x: x.cluster_id),
+        )

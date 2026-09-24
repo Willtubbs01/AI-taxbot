@@ -1,0 +1,10 @@
+version: "0.1"
+tasks:
+  identify_topics: {}
+  identify_source_documents: {}
+  identify_return_forms: {}
+  identify_missing_information: {}
+  plan_calculations: {}
+  plan_retrieval: {}
+  trace_form_flow: {}
+  analyze_tax_scenario: {}

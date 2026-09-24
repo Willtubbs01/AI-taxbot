@@ -1,9 +1,9 @@
-from enum import StrEnum
+from enum import Enum
+from datetime import datetime, timezone
 from pydantic import Field
 from taxmoe.schemas.common import TaxMoEModel
 
-
-class BuildStage(StrEnum):
+class BuildStage(str, Enum):
     PREPARE = "prepare"
     GENERATE = "generate"
     MUTATE = "mutate"
@@ -12,17 +12,20 @@ class BuildStage(StrEnum):
     EXPORT = "export"
     REPORT = "report"
 
-
-class StageStatus(StrEnum):
+class StageStatus(str, Enum):
     PENDING = "pending"
     RUNNING = "running"
     COMPLETE = "complete"
     FAILED = "failed"
     SKIPPED = "skipped"
 
-
 class DatasetBuildRecord(TaxMoEModel):
     build_id: str
-    name: str
+    build_name: str
     spec_hash: str
-    stages: dict[BuildStage, StageStatus] = Field(default_factory=dict)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    stages: dict[str, StageStatus] = Field(default_factory=dict)
+    current_stage: str | None = None
+    passed_validation: bool = False
+    export_id: str | None = None

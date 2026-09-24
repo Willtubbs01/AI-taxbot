@@ -1,11 +1,23 @@
 from collections import defaultdict
 from taxmoe.schemas.scenario import TaxScenario
-from .splitter import SplitAssignment
+from taxmoe.schemas.manifest import SplitManifest
 
+def audit_leakage(scenarios: list[TaxScenario], manifest: SplitManifest) -> dict:
+    cluster_split = {x.cluster_id: x.split for x in manifest.assignments}
+    family_splits = defaultdict(set)
+    content_splits = defaultdict(set)
 
-def family_leakage(scenarios: list[TaxScenario], cluster_of: dict[str, str], assignments: dict[str, SplitAssignment]):
-    by_family = defaultdict(set)
     for s in scenarios:
-        cid = cluster_of[str(s.scenario_id)]
-        by_family[str(s.family_id)].add(assignments[cid].split.value)
-    return {family: sorted(splits) for family, splits in by_family.items() if len(splits) > 1}
+        cluster = manifest.scenario_to_cluster[s.scenario_id]
+        split = cluster_split[cluster]
+        family_splits[s.family_id].add(split)
+        content_splits[s.content_hash].add(split)
+
+    family_leaks = {k: sorted(v) for k, v in family_splits.items() if len(v) > 1}
+    content_leaks = {k: sorted(v) for k, v in content_splits.items() if len(v) > 1}
+
+    return {
+        "passed": not family_leaks and not content_leaks,
+        "family_leaks": family_leaks,
+        "content_leaks": content_leaks,
+    }

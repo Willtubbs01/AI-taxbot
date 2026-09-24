@@ -1,14 +1,20 @@
 from __future__ import annotations
 import json
 from pathlib import Path
+from taxmoe.ingestion.hashing import sha256_file
 
-
-def write_jsonl(path: str | Path, records) -> int:
-    path = Path(path); path.parent.mkdir(parents=True, exist_ok=True)
-    count = 0
-    with path.open("w", encoding="utf-8", newline="\n") as f:
-        for record in records:
-            payload = record.model_dump(mode="json") if hasattr(record, "model_dump") else record
-            f.write(json.dumps(payload, sort_keys=True, ensure_ascii=False) + "\n")
-            count += 1
-    return count
+def write_jsonl(path: str | Path, rows: list[dict]) -> dict:
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    with open(tmp, "w", encoding="utf-8", newline="\n") as f:
+        for row in rows:
+            f.write(json.dumps(row, ensure_ascii=False, sort_keys=True, default=str))
+            f.write("\n")
+    tmp.replace(path)
+    return {
+        "path": str(path),
+        "records": len(rows),
+        "bytes": path.stat().st_size,
+        "sha256": sha256_file(path),
+    }

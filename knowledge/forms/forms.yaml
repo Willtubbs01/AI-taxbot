@@ -1,0 +1,17 @@
+version: "0.1"
+forms:
+  - form_id: FORM-W2
+    name: Form W-2
+    role: source_document
+  - form_id: FORM-1099-B
+    name: Form 1099-B
+    role: source_document
+  - form_id: FORM-1040
+    name: Form 1040
+    role: return_form
+  - form_id: FORM-8949
+    name: Form 8949
+    role: return_form
+  - form_id: FORM-SCHEDULE-D
+    name: Schedule D
+    role: schedule

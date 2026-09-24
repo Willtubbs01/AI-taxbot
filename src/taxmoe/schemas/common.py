@@ -1,33 +1,32 @@
 from __future__ import annotations
-
-from datetime import datetime, timezone
-from hashlib import sha256
-from json import dumps
+from decimal import Decimal
 from typing import Any
-
-from pydantic import BaseModel, ConfigDict
-
+from pydantic import BaseModel, ConfigDict, Field
+from .enums import Severity
 
 class TaxMoEModel(BaseModel):
-    """Shared strict Pydantic base model."""
-
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
-    def canonical_json(self) -> str:
-        payload = self.model_dump(mode="json", exclude_none=False)
-        return dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+class Money(TaxMoEModel):
+    amount_cents: int
+    currency: str = "USD"
 
-    def content_hash(self) -> str:
-        return sha256(self.canonical_json().encode("utf-8")).hexdigest()
+    @property
+    def amount(self) -> Decimal:
+        return Decimal(self.amount_cents) / Decimal(100)
 
+class Jurisdiction(TaxMoEModel):
+    country: str = "US"
+    level: str = "federal"
+    state: str | None = None
 
-def stable_hash(*parts: Any) -> str:
-    serialized = "\x1f".join(
-        dumps(part, sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str)
-        for part in parts
-    )
-    return sha256(serialized.encode("utf-8")).hexdigest()
+class ValidationIssue(TaxMoEModel):
+    code: str
+    severity: Severity
+    message: str
+    artifact_id: str | None = None
+    details: dict[str, Any] = Field(default_factory=dict)
 
-
-def utc_now() -> datetime:
-    return datetime.now(timezone.utc)
+class ValidationResult(TaxMoEModel):
+    passed: bool
+    issues: list[ValidationIssue] = Field(default_factory=list)

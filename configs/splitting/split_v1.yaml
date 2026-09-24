@@ -1,0 +1,7 @@
+split_version: v1
+clustering_version: v1
+dedup_version: v1
+seed: 42017
+train_fraction: 0.80
+validation_fraction: 0.10
+test_fraction: 0.10

@@ -1,27 +1,20 @@
-from enum import StrEnum
+from enum import Enum
 from pydantic import Field
 from taxmoe.schemas.common import TaxMoEModel
+from taxmoe.schemas.manifest import FileRecord
 
-
-class DatasetReleaseStatus(StrEnum):
+class DatasetReleaseStatus(str, Enum):
     CANDIDATE = "candidate"
     FROZEN = "frozen"
     WITHDRAWN = "withdrawn"
 
-
-class ReleaseFile(TaxMoEModel):
-    path: str
-    bytes: int
-    sha256: str
-    records: int | None = None
-
-
 class DatasetReleaseManifest(TaxMoEModel):
     release_id: str
-    name: str
-    version: str
+    dataset_name: str
+    dataset_version: str
     status: DatasetReleaseStatus
     source_build_id: str
     source_build_spec_hash: str
-    files: list[ReleaseFile] = Field(default_factory=list)
-    release_content_hash: str
+    release_content_hash: str = ""
+    files: list[FileRecord] = Field(default_factory=list)
+    metadata: dict = Field(default_factory=dict)

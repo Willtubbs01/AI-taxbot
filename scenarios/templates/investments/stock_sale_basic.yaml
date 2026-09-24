@@ -1,0 +1,60 @@
+template:
+  template_id: TPL-STOCK-SALE-BASIC
+  revision: 1
+  name: Basic stock sale
+  template_type: base
+  supported_tax_years: [2025]
+  domain_ids: [investment]
+  task_ids:
+    - identify_topics
+    - identify_source_documents
+    - identify_return_forms
+    - identify_missing_information
+    - plan_calculations
+    - analyze_tax_scenario
+  variables:
+    - variable_id: proceeds
+      concept_id: investment.proceeds
+      value_type: money
+      generator:
+        type: money_range
+        min: 10000
+        max: 10000000
+        step: 100
+      mutation_tags: [removable]
+    - variable_id: basis
+      concept_id: investment.basis
+      value_type: money
+      generator:
+        type: money_range
+        min: 10000
+        max: 10000000
+        step: 100
+      mutation_tags: [removable, conflicting, assumption_attack]
+    - variable_id: acquisition_date
+      concept_id: investment.acquisition_date
+      value_type: date
+      generator:
+        type: date_year_offset
+        values: [-3, -2, -1, 0]
+    - variable_id: disposition_date
+      concept_id: investment.disposition_date
+      value_type: date
+      generator:
+        type: date_in_tax_year
+  constraints:
+    - type: before
+      left: acquisition_date
+      right: disposition_date
+  events:
+    - event_id: sale
+      event_type: investment.disposition
+      variable_refs: [proceeds, basis, acquisition_date, disposition_date]
+  documents:
+    - document_id: broker_statement
+      form_id: FORM-1099-B
+      variable_refs: [proceeds, basis, disposition_date]
+  required_rule_ids: [RULE-STOCK-DISPOSITION-2025]
+  generation:
+    max_attempts: 100
+    require_complete_base_scenario: true

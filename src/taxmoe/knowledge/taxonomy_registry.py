@@ -1,46 +1,29 @@
-from __future__ import annotations
-
 from pathlib import Path
-from typing import Iterable
-
 import yaml
-from pydantic import Field
-
-from taxmoe.schemas.common import TaxMoEModel
-
-
-class TaxonomyConcept(TaxMoEModel):
-    concept_id: str
-    name: str
-    domain_id: str
-    aliases: list[str] = Field(default_factory=list)
-    deprecated_by: str | None = None
-
 
 class TaxonomyRegistry:
-    def __init__(self, concepts: Iterable[TaxonomyConcept], version: str = "0.1"):
+    def __init__(self, concepts: dict[str, dict], tasks: dict[str, dict], version: str = "0.1"):
+        self.concepts = concepts
+        self.tasks = tasks
         self.version = version
-        concepts = list(concepts)
-        self._concepts = {c.concept_id: c for c in concepts}
-        if len(self._concepts) != len(concepts):
-            raise ValueError("Duplicate taxonomy concept IDs")
 
     @classmethod
-    def from_yaml(cls, path: str | Path) -> "TaxonomyRegistry":
-        raw = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    def from_yaml(cls, domains_path: str | Path, tasks_path: str | Path) -> "TaxonomyRegistry":
+        domains = yaml.safe_load(Path(domains_path).read_text(encoding="utf-8")) or {}
+        tasks = yaml.safe_load(Path(tasks_path).read_text(encoding="utf-8")) or {}
         return cls(
-            [TaxonomyConcept.model_validate(x) for x in raw.get("concepts", [])],
-            version=str(raw.get("version", "0.1")),
+            concepts=domains.get("concepts", {}),
+            tasks=tasks.get("tasks", {}),
+            version=str(domains.get("version", "0.1")),
         )
 
-    def get(self, concept_id: str) -> TaxonomyConcept | None:
-        return self._concepts.get(concept_id)
+    def has_concept(self, concept_id: str) -> bool:
+        return concept_id in self.concepts
 
-    def require(self, concept_id: str) -> TaxonomyConcept:
-        value = self.get(concept_id)
-        if value is None:
+    def has_task(self, task_id: str) -> bool:
+        return task_id in self.tasks
+
+    def require_concept(self, concept_id: str) -> dict:
+        if not self.has_concept(concept_id):
             raise KeyError(f"Unknown concept: {concept_id}")
-        return value
-
-    def __contains__(self, concept_id: str) -> bool:
-        return concept_id in self._concepts
+        return self.concepts[concept_id]

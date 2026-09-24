@@ -1,2 +1,0 @@
-class IngestionError(RuntimeError):
-    pass

@@ -1,0 +1,38 @@
+version: "0.1"
+versions:
+  - form_version_id: FORMVER-W2-2025
+    form_id: FORM-W2
+    tax_year: 2025
+    fields:
+      - field_id: FIELD-W2-WAGES
+        label: Wages, tips, other compensation
+        concept_id: income.wages
+      - field_id: FIELD-W2-WITHHOLDING
+        label: Federal income tax withheld
+        concept_id: payment.federal_withholding
+
+  - form_version_id: FORMVER-1099B-2025
+    form_id: FORM-1099-B
+    tax_year: 2025
+    fields:
+      - field_id: FIELD-1099B-PROCEEDS
+        label: Proceeds
+        concept_id: investment.proceeds
+      - field_id: FIELD-1099B-BASIS
+        label: Cost or other basis
+        concept_id: investment.basis
+
+  - form_version_id: FORMVER-1040-2025
+    form_id: FORM-1040
+    tax_year: 2025
+    fields: []
+
+  - form_version_id: FORMVER-8949-2025
+    form_id: FORM-8949
+    tax_year: 2025
+    fields: []
+
+  - form_version_id: FORMVER-SCHEDULE-D-2025
+    form_id: FORM-SCHEDULE-D
+    tax_year: 2025
+    fields: []

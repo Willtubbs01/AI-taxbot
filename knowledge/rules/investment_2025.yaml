@@ -1,0 +1,32 @@
+rules:
+  - rule_id: RULE-STOCK-DISPOSITION-2025
+    revision: 1
+    name: Basic stock disposition pathway
+    category: investment
+    tax_years: [2025]
+    conditions:
+      - concept_id: investment.proceeds
+        operator: EXISTS
+    effects:
+      - effect_type: ADD_TOPIC
+        target: investment.disposition
+      - effect_type: SOURCE_DOCUMENT
+        target: FORM-1099-B
+      - effect_type: REQUIRE_INFORMATION
+        target: investment.basis
+      - effect_type: REQUIRE_INFORMATION
+        target: investment.disposition_date
+      - effect_type: REQUIRE_CALCULATION
+        target: CALC-CAPITAL-GAIN-LOSS
+      - effect_type: CANDIDATE_FORM
+        target: FORM-8949
+      - effect_type: CANDIDATE_FORM
+        target: FORM-SCHEDULE-D
+      - effect_type: CANDIDATE_FORM
+        target: FORM-1040
+    source_refs: []
+    status: verified
+    completeness: complete
+    scenario_generation_allowed: true
+    quality: Q3
+    review: R1

@@ -1,22 +1,25 @@
-from enum import StrEnum
+from enum import Enum
 
-
-class QualityLevel(StrEnum):
+class QualityLevel(str, Enum):
     Q0 = "Q0"
     Q1 = "Q1"
     Q2 = "Q2"
     Q3 = "Q3"
     Q4 = "Q4"
 
-
-class ReviewLevel(StrEnum):
+class ReviewLevel(str, Enum):
     R0 = "R0"
     R1 = "R1"
     R2 = "R2"
     R3 = "R3"
 
+class Severity(str, Enum):
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"
+    FATAL = "fatal"
 
-class InformationState(StrEnum):
+class InformationState(str, Enum):
     PRESENT = "present"
     MISSING = "missing"
     UNKNOWN = "unknown"
@@ -25,43 +28,26 @@ class InformationState(StrEnum):
     CONFLICTING = "conflicting"
     NOT_APPLICABLE = "not_applicable"
 
-
-class FactOrigin(StrEnum):
+class FactOrigin(str, Enum):
     SYNTHETIC = "synthetic"
-    USER_STATEMENT = "user_statement"
-    TAX_DOCUMENT = "tax_document"
+    USER = "user"
+    DOCUMENT = "document"
     DERIVED = "derived"
-    EXTERNAL = "external"
 
+class AnswerabilityStatus(str, Enum):
+    ANSWERABLE = "ANSWERABLE"
+    NEEDS_INFORMATION = "NEEDS_INFORMATION"
+    NEEDS_RULE_LOOKUP = "NEEDS_RULE_LOOKUP"
+    AMBIGUOUS = "AMBIGUOUS"
+    OUTSIDE_SCOPE = "OUTSIDE_SCOPE"
 
-class TruthPolarity(StrEnum):
-    SUPPORTED = "supported"
-    CONTRADICTED = "contradicted"
-    UNKNOWN = "unknown"
-    SYNTHETIC = "synthetic"
+class ScenarioOrigin(str, Enum):
+    GENERATED = "generated"
+    MANUAL = "manual"
+    MUTATED = "mutated"
+    COUNTERFACTUAL = "counterfactual"
 
-
-class RuleStatus(StrEnum):
-    DRAFT = "draft"
-    VERIFIED = "verified"
-    SUPERSEDED = "superseded"
-    CONFLICTED = "conflicted"
-
-
-class RuleCompleteness(StrEnum):
-    PARTIAL = "partial"
-    COMPLETE = "complete"
-
-
-class AnswerabilityStatus(StrEnum):
-    ANSWERABLE = "answerable"
-    NEEDS_INFORMATION = "needs_information"
-    NEEDS_RULE_LOOKUP = "needs_rule_lookup"
-    AMBIGUOUS = "ambiguous"
-    OUTSIDE_SCOPE = "outside_scope"
-
-
-class DatasetSplit(StrEnum):
+class DatasetSplit(str, Enum):
     TRAIN = "train"
     VALIDATION = "validation"
     DEV_EVAL = "dev_eval"
@@ -73,22 +59,12 @@ class DatasetSplit(StrEnum):
     TEST_ATTACK_OOD = "test_attack_ood"
     TEST_GOLD = "test_gold"
 
+class ValidationMode(str, Enum):
+    FAST = "fast"
+    FULL = "full"
+    FREEZE = "freeze"
 
-class ScenarioOrigin(StrEnum):
-    GENERATED = "generated"
-    MANUAL = "manual"
-    MUTATED = "mutated"
-    COUNTERFACTUAL = "counterfactual"
-
-
-class MutationTruthEffect(StrEnum):
+class MutationTruthEffect(str, Enum):
     MUST_CHANGE_ANALYSIS = "must_change_analysis"
     MUST_PRESERVE_ANALYSIS = "must_preserve_analysis"
     MAY_CHANGE_ANALYSIS = "may_change_analysis"
-
-
-class Severity(StrEnum):
-    INFO = "info"
-    WARNING = "warning"
-    ERROR = "error"
-    FATAL = "fatal"

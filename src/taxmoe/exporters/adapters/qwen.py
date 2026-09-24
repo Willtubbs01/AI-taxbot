@@ -1,10 +1,12 @@
-class QwenChatAdapter:
-    id = "qwen_chat"
-    version = "0.1"
+SYSTEM_STANDARD = (
+    "You are a specialized U.S. federal individual-income-tax reasoning component. "
+    "Analyze only the provided task and facts. Do not invent missing taxpayer information. "
+    "Use the requested output format."
+)
 
-    def adapt(self, system: str, user: str, assistant: str) -> list[dict[str, str]]:
-        return [
-            {"role": "system", "content": system},
-            {"role": "user", "content": user},
-            {"role": "assistant", "content": assistant},
-        ]
+def to_qwen_messages(user_text: str, assistant_text: str, system_text: str = SYSTEM_STANDARD):
+    return [
+        {"role": "system", "content": system_text},
+        {"role": "user", "content": user_text},
+        {"role": "assistant", "content": assistant_text},
+    ]

@@ -1,7 +1,14 @@
-from taxmoe.schemas.fact import Money
+from taxmoe.schemas.common import Money
+from .registry import CalculationRegistry
 
+def capital_gain_or_loss(inputs: dict):
+    proceeds = inputs["investment.proceeds"]
+    basis = inputs["investment.basis"]
+    p = proceeds.amount_cents if isinstance(proceeds, Money) else int(proceeds["amount_cents"])
+    b = basis.amount_cents if isinstance(basis, Money) else int(basis["amount_cents"])
+    return Money(amount_cents=p - b)
 
-def capital_gain_or_loss(proceeds: Money, basis: Money) -> Money:
-    if proceeds.currency != basis.currency:
-        raise ValueError("Currency mismatch")
-    return Money(amount_cents=proceeds.amount_cents - basis.amount_cents, currency=proceeds.currency)
+def default_calculation_registry() -> CalculationRegistry:
+    r = CalculationRegistry(version="0.1")
+    r.register("CALC-CAPITAL-GAIN-LOSS", capital_gain_or_loss)
+    return r

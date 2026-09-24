@@ -1,0 +1,57 @@
+manifest_id: irs_2025_core_v0.1
+version: "0.1"
+sources:
+  - source_id: SOURCE-2025-W2
+    title: 2025 Form W-2
+    url: https://www.irs.gov/forms-pubs/about-form-w-2
+    raw_path: sources/raw/2025/form_w2.pdf
+    sha256: REPLACE_ME
+    document_type: official_form
+    authority_class: official_form
+    tax_year: 2025
+    quality: Q1
+    review: R0
+
+  - source_id: SOURCE-2025-1040
+    title: 2025 Form 1040
+    url: https://www.irs.gov/forms-pubs/about-form-1040
+    raw_path: sources/raw/2025/form_1040.pdf
+    sha256: REPLACE_ME
+    document_type: official_form
+    authority_class: official_form
+    tax_year: 2025
+    quality: Q1
+    review: R0
+
+  - source_id: SOURCE-2025-1099B
+    title: 2025 Form 1099-B
+    url: https://www.irs.gov/forms-pubs/about-form-1099-b
+    raw_path: sources/raw/2025/form_1099b.pdf
+    sha256: REPLACE_ME
+    document_type: official_form
+    authority_class: official_form
+    tax_year: 2025
+    quality: Q1
+    review: R0
+
+  - source_id: SOURCE-2025-8949
+    title: 2025 Form 8949
+    url: https://www.irs.gov/forms-pubs/about-form-8949
+    raw_path: sources/raw/2025/form_8949.pdf
+    sha256: REPLACE_ME
+    document_type: official_form
+    authority_class: official_form
+    tax_year: 2025
+    quality: Q1
+    review: R0
+
+  - source_id: SOURCE-2025-SCHEDULE-D
+    title: 2025 Schedule D
+    url: https://www.irs.gov/forms-pubs/about-schedule-d-form-1040
+    raw_path: sources/raw/2025/schedule_d.pdf
+    sha256: REPLACE_ME
+    document_type: official_form
+    authority_class: official_form
+    tax_year: 2025
+    quality: Q1
+    review: R0

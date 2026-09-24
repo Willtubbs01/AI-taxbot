@@ -1,0 +1,5 @@
+policy_version: v1
+hard_failures:
+  - SCENARIO-ANALYSIS-MISMATCH
+  - SCENARIO-CONTENT-HASH-MISMATCH
+  - SPLIT-LEAKAGE

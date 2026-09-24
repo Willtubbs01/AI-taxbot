@@ -1,0 +1,66 @@
+template:
+  template_id: TPL-STOCK-SALE-TWO-TRANSACTIONS
+  revision: 1
+  name: Two stock sales
+  template_type: base
+  supported_tax_years: [2025]
+  domain_ids: [investment]
+  task_ids:
+    - identify_topics
+    - identify_missing_information
+    - plan_calculations
+    - analyze_tax_scenario
+  variables:
+    - variable_id: sale_a_proceeds
+      concept_id: investment.proceeds
+      value_type: money
+      generator: {type: money_range, min: 10000, max: 5000000, step: 100}
+    - variable_id: sale_a_basis
+      concept_id: investment.basis
+      value_type: money
+      generator: {type: money_range, min: 10000, max: 5000000, step: 100}
+      mutation_tags: [removable]
+    - variable_id: sale_a_acquired
+      concept_id: investment.acquisition_date
+      value_type: date
+      generator: {type: date_year_offset, values: [-3, -2, -1, 0]}
+    - variable_id: sale_a_sold
+      concept_id: investment.disposition_date
+      value_type: date
+      generator: {type: date_in_tax_year}
+    - variable_id: sale_b_proceeds
+      concept_id: investment.proceeds
+      value_type: money
+      generator: {type: money_range, min: 10000, max: 5000000, step: 100}
+    - variable_id: sale_b_basis
+      concept_id: investment.basis
+      value_type: money
+      generator: {type: money_range, min: 10000, max: 5000000, step: 100}
+      mutation_tags: [removable]
+    - variable_id: sale_b_acquired
+      concept_id: investment.acquisition_date
+      value_type: date
+      generator: {type: date_year_offset, values: [-3, -2, -1, 0]}
+    - variable_id: sale_b_sold
+      concept_id: investment.disposition_date
+      value_type: date
+      generator: {type: date_in_tax_year}
+  constraints:
+    - {type: before, left: sale_a_acquired, right: sale_a_sold}
+    - {type: before, left: sale_b_acquired, right: sale_b_sold}
+  events:
+    - event_id: sale_a
+      event_type: investment.disposition
+      variable_refs: [sale_a_proceeds, sale_a_basis, sale_a_acquired, sale_a_sold]
+    - event_id: sale_b
+      event_type: investment.disposition
+      variable_refs: [sale_b_proceeds, sale_b_basis, sale_b_acquired, sale_b_sold]
+  documents:
+    - document_id: broker_statement
+      form_id: FORM-1099-B
+      variable_refs:
+        [sale_a_proceeds, sale_a_basis, sale_a_sold, sale_b_proceeds, sale_b_basis, sale_b_sold]
+  required_rule_ids: [RULE-STOCK-DISPOSITION-2025]
+  generation:
+    max_attempts: 100
+    require_complete_base_scenario: true

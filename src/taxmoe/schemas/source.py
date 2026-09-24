@@ -1,30 +1,23 @@
-from __future__ import annotations
-
 from datetime import datetime
-from typing import Literal
-
 from pydantic import Field
-
-from .common import TaxMoEModel
-from .identifiers import SourceId
-
-
-class SourceLocator(TaxMoEModel):
-    page: int | None = Field(default=None, ge=1)
-    section: str | None = None
-    chunk_id: str | None = None
-
+from .common import TaxMoEModel, Jurisdiction
+from .enums import QualityLevel, ReviewLevel
 
 class SourceRecord(TaxMoEModel):
-    source_id: SourceId
+    source_id: str
     title: str
-    jurisdiction: str
-    authority_class: str
-    tax_year: int | None = None
-    source_type: str
     url: str | None = None
     raw_path: str
-    sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
-    retrieved_at: datetime
-    revision: str | None = None
-    status: Literal["active", "superseded", "quarantined"] = "active"
+    sha256: str
+    document_type: str
+    authority_class: str
+    jurisdiction: Jurisdiction = Field(default_factory=Jurisdiction)
+    tax_year: int | None = None
+    retrieved_at: datetime | None = None
+    quality: QualityLevel = QualityLevel.Q1
+    review: ReviewLevel = ReviewLevel.R0
+
+class SourceManifest(TaxMoEModel):
+    manifest_id: str
+    version: str
+    sources: list[SourceRecord]

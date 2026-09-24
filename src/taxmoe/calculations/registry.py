@@ -1,19 +1,23 @@
-from __future__ import annotations
-from collections.abc import Callable
+from typing import Callable, Any
 
+Calculator = Callable[[dict[str, Any]], Any]
 
 class CalculationRegistry:
-    def __init__(self):
-        self._calculators: dict[str, Callable[..., object]] = {}
+    def __init__(self, version: str = "0.1"):
+        self.version = version
+        self._items: dict[str, Calculator] = {}
 
-    def register(self, calculation_id: str, fn: Callable[..., object]) -> None:
-        if calculation_id in self._calculators:
+    def register(self, calculation_id: str, fn: Calculator) -> None:
+        if calculation_id in self._items:
             raise ValueError(f"Duplicate calculation: {calculation_id}")
-        self._calculators[calculation_id] = fn
+        self._items[calculation_id] = fn
 
-    def calculate(self, calculation_id: str, **kwargs):
+    def run(self, calculation_id: str, inputs: dict[str, Any]):
         try:
-            fn = self._calculators[calculation_id]
-        except KeyError as exc:
-            raise KeyError(f"Unknown calculation: {calculation_id}") from exc
-        return fn(**kwargs)
+            fn = self._items[calculation_id]
+        except KeyError:
+            raise KeyError(f"Unknown calculation: {calculation_id}")
+        return fn(inputs)
+
+    def has(self, calculation_id: str) -> bool:
+        return calculation_id in self._items
