@@ -1,0 +1,11 @@
+version: "1"
+strategy: right_edge_causal
+max_features_per_token: 24
+deduplicate_feature_ids: true
+persistence_window: 0
+priority:
+  word_before_char: true
+  longer_word_first: true
+  longer_char_first: true
+  canonical_before_alias: true
+  tie_break: feature_id

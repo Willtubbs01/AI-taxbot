@@ -1,0 +1,20 @@
+version: "1"
+unicode_form: NFKC
+lowercase: true
+preserve_tax_years: true
+normalize_money: true
+normalize_percent: true
+normalize_general_numbers: true
+max_aliases_per_atom: 4
+word:
+  enabled: true
+  min_order: 1
+  max_order: 4
+char:
+  enabled: true
+  orders: [3, 4, 5]
+  min_token_length: 7
+  eligible_if_contains_digit: true
+  eligible_if_contains_hyphen: true
+  eligible_if_contains_slash: true
+  max_atom_chars: 64

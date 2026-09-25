@@ -1,0 +1,11 @@
+version: "1"
+router:
+  hidden_dim: 1024
+  num_experts: 4
+  top_k: 2
+  ngram:
+    enabled: true
+    fusion: additive_logits
+    input_dim: 32
+    initial_scale: 0.01
+    projection_bias: false

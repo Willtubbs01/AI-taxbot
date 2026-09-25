@@ -1,0 +1,7 @@
+version: "1"
+padding_side: right
+label_pad_id: -100
+ngram_pad_id: 0
+max_features_per_token: 24
+pad_to_multiple_of: 8
+packing_enabled: false

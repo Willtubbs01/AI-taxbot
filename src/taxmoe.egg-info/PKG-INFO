@@ -1,10 +1,14 @@
 Metadata-Version: 2.4
 Name: taxmoe
 Version: 0.1.0
-Summary: TaxMoE Stage 3 dataset pipeline
+Summary: TaxMoE tax dataset, Qwen input, and n-gram routing pipeline
 Requires-Python: >=3.11
 Requires-Dist: pydantic<3,>=2.8
 Requires-Dist: PyYAML>=6.0
 Requires-Dist: typer>=0.12
 Provides-Extra: dev
+Requires-Dist: transformers>=4.51
+Requires-Dist: tokenizers>=0.21
+Requires-Dist: torch>=2.5
+Requires-Dist: pyarrow>=17
 Requires-Dist: pytest>=8.0; extra == "dev"

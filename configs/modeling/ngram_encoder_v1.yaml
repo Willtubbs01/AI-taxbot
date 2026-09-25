@@ -1,0 +1,10 @@
+version: "1"
+num_features: 147457
+embedding_dim: 32
+padding_idx: 0
+pooling: mean
+normalization: layer_norm
+dropout: 0.05
+namespace_embeddings: false
+order_embeddings: false
+feature_count_input: false

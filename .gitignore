@@ -27,3 +27,5 @@ data/builds/*/validation/*.jsonl
 # Environment / secrets
 .env
 .env.*
+
+docs/

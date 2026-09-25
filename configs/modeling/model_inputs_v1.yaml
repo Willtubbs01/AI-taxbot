@@ -1,0 +1,24 @@
+version: "1"
+dataset:
+  release: TaxMoE-Dataset-v0.1
+  release_hash: "REPLACE_WITH_STAGE3_RELEASE_HASH"
+model:
+  config: qwen3_0.6b.yaml
+tokenization:
+  config: tokenization_v1.yaml
+ngram:
+  normalization: ../ngrams/ngram_v1.yaml
+  hashing: ../ngrams/hashing_v1.yaml
+  alignment: ../ngrams/alignment_v1.yaml
+  encoder: ngram_encoder_v1.yaml
+router:
+  feature_interface: router_features_v1.yaml
+cache:
+  format: arrow
+  dtype: int32
+  shard_target_mb: 384
+  compression: null
+collator:
+  config: collator_v1.yaml
+packing:
+  enabled: false

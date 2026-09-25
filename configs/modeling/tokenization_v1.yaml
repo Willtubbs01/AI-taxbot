@@ -1,0 +1,16 @@
+version: "1"
+model:
+  model_id: Qwen/Qwen3-0.6B
+  revision: "REPLACE_WITH_EXACT_HUGGINGFACE_COMMIT"
+chat:
+  enable_thinking: false
+  add_generation_prompt: false
+sequence:
+  max_tokens: 4096
+  truncation: false
+  overflow_policy: reject
+cpt_loss: full_causal
+sft_loss: assistant_only
+require_fast_tokenizer: true
+require_offsets: true
+require_assistant_mask: true

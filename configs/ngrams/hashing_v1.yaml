@@ -1,0 +1,11 @@
+version: "1"
+algorithm: blake2b-64
+key_id: taxmoe-ngram-v1
+namespaces:
+  word_1: {bucket_count: 16384, offset: 0}
+  word_2: {bucket_count: 32768, offset: 16384}
+  word_3: {bucket_count: 32768, offset: 49152}
+  word_4: {bucket_count: 16384, offset: 81920}
+  char_3: {bucket_count: 16384, offset: 98304}
+  char_4: {bucket_count: 16384, offset: 114688}
+  char_5: {bucket_count: 16384, offset: 131072}

@@ -1,0 +1,7 @@
+model:
+  model_id: Qwen/Qwen3-0.6B
+  revision: "REPLACE_WITH_EXACT_HUGGINGFACE_COMMIT"
+tokenizer:
+  model_id: Qwen/Qwen3-0.6B
+  revision: "REPLACE_WITH_EXACT_HUGGINGFACE_COMMIT"
+  use_fast: true

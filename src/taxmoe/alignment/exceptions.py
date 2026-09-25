@@ -1,0 +1,2 @@
+class AlignmentError(RuntimeError):
+    pass
