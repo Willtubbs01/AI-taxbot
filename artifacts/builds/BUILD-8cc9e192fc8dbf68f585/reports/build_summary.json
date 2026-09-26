@@ -1,0 +1,11 @@
+{
+  "base_scenarios": 500,
+  "build_id": "BUILD-8cc9e192fc8dbf68f585",
+  "export_id": "EXPORT-4207bc8fbf1467d48ee0",
+  "exported_examples": 9400,
+  "mutated_scenarios": 375,
+  "name": "taxmoe_dev",
+  "spec_hash": "8cc9e192fc8dbf68f585cd0f1ea344bbf8c9529e8ebbb047363e23ab9cac1f81",
+  "total_scenarios": 875,
+  "validation_passed": true
+}

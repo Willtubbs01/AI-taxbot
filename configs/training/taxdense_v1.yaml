@@ -1,0 +1,17 @@
+run:
+  name: TaxDense-0.6B-CPT-v1
+model:
+  config: configs/modeling/qwen_dense_v1.yaml
+data:
+  config: configs/training/dense_cpt_data_v1.yaml
+objective:
+  config: configs/training/dense_cpt_objective_v1.yaml
+optimization:
+  config: configs/training/dense_optimizer_v1.yaml
+checkpointing:
+  config: configs/training/checkpointing_v1.yaml
+evaluation:
+  dev_config: configs/evaluation/eval_dev_v1.yaml
+budget:
+  max_effective_passes: 2.0
+  max_training_tokens: null

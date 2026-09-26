@@ -1,0 +1,19 @@
+evaluation:
+  version: "1"
+  generation:
+    do_sample: false
+    num_beams: 1
+    enable_thinking: false
+    max_new_tokens: 512
+  suites:
+    validation: true
+    dev_eval: true
+    test_id: false
+    composition_ood: false
+    temporal_ood: false
+    attack_ood: false
+    gold: false
+  teacher_forcing:
+    enabled: true
+  structured:
+    strict_json: true

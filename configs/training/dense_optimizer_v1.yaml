@@ -1,0 +1,13 @@
+# Conservative full-parameter starting recipe. Re-run the Stage 5 Part 2 hardware
+# profile before production and version this config if you change any semantic value.
+optimization:
+  precision: fp16
+  optimizer: adamw
+  learning_rate: 8.0e-6
+  weight_decay: 0.10
+  betas: [0.9, 0.95]
+  eps: 1.0e-8
+  gradient_clip_norm: 1.0
+  scheduler: cosine
+  warmup_ratio: 0.05
+  gradient_accumulation_steps: 8

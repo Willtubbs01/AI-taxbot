@@ -1,0 +1,14 @@
+checkpointing:
+  version: "1"
+  save_type: full
+  save_at_optimizer_boundary: true
+  keep_latest: 2
+  keep_best: 3
+  atomic_write: true
+  verify_after_write: true
+  hash_algorithm: sha256
+  resume:
+    strict_model: true
+    strict_run_spec: true
+    restore_rng: true
+    restore_sampler: true

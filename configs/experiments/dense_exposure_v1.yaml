@@ -1,0 +1,3 @@
+experiment:
+  effective_passes: [0.5, 1.0, 1.5, 2.0]
+  primary_metric: tax_validation_loss

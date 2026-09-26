@@ -1,0 +1,5 @@
+objective:
+  type: causal_lm
+  label_policy: full_causal
+  auxiliary_losses: []
+  normalize_by: supervised_tokens

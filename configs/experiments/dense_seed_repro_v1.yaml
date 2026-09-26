@@ -1,0 +1,3 @@
+study:
+  seeds: [1701, 1702, 1703]
+  change_only: seed

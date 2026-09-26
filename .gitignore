@@ -29,3 +29,11 @@ data/builds/*/validation/*.jsonl
 .env.*
 
 docs/
+# Stage 5 model/training artifacts
+artifacts/models/
+artifacts/training/
+artifacts/evaluations/
+artifacts/experiments/
+artifacts/hardware/
+*.safetensors
+*.bin

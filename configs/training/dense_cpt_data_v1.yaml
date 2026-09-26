@@ -1,0 +1,14 @@
+data:
+  input_release: TaxMoE-Inputs-Qwen3-v0.1
+  source:
+    cache_kind: token_only
+    family: cpt
+    split: train
+  sampling:
+    strategy: token_uniform
+    shuffle: true
+    seed: 1701
+  replay:
+    enabled: false
+  packing:
+    enabled: false
