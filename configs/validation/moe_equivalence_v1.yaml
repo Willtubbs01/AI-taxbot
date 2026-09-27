@@ -1,0 +1,28 @@
+equivalence:
+  version: "1"
+  target_layers: [3, 7, 11, 15, 19, 23, 27]
+  require:
+    non_target_hash_match: true
+    expert_exact_copy: true
+    expert_independent_storage: true
+    router_weights_normalized: true
+    strict_reload: true
+    finite_outputs: true
+  tolerances:
+    # Fill/lock production precision tolerances after running the validated real
+    # Qwen implementation. These conservative placeholders are NOT freeze gates.
+    fp32:
+      atol: 1.0e-5
+      rtol: 1.0e-5
+    fp16:
+      atol: 1.0e-3
+      rtol: 1.0e-3
+    bf16:
+      atol: 5.0e-3
+      rtol: 5.0e-3
+
+  full_model_fp32:
+    sequence_length: 128
+    logits_atol: 1.0e-3
+    logits_rtol: 1.0e-4
+    lm_loss_atol: 1.0e-5

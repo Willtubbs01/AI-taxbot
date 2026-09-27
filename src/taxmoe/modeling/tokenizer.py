@@ -108,16 +108,22 @@ class TaxMoETokenizer:
         except Exception:
             supports_offsets = False
 
-        has_template = bool(getattr(self.tokenizer, "chat_template", None))
+        template = getattr(self.tokenizer, "chat_template", None)
+        has_template = bool(template)
         supports_mask = False
         supports_thinking = False
         if has_template:
             sample = [ChatMessage(role="user", content="Hello"), ChatMessage(role="assistant", content="Hi")]
-            try:
-                _, _, mask = self.tokenize_messages_with_mask(sample)
-                supports_mask = any(mask)
-            except Exception:
-                supports_mask = False
+            # Hugging Face can only return an assistant-token mask when the chat
+            # template exposes generation spans.  Avoid calling the API when the
+            # marker is absent: recent Transformers versions otherwise emit a
+            # warning and return an unusable all-zero/no mask.
+            if "{% generation" in str(template):
+                try:
+                    _, _, mask = self.tokenize_messages_with_mask(sample)
+                    supports_mask = any(mask)
+                except Exception:
+                    supports_mask = False
             try:
                 _ = self.tokenizer.apply_chat_template(self._messages(sample), tokenize=False, enable_thinking=False)
                 supports_thinking = True

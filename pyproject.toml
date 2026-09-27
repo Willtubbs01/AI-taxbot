@@ -16,6 +16,8 @@ dependencies = [
   "torch>=2.5",
   "numpy>=1.26",
   "pyarrow>=17",
+  "safetensors>=0.4",
+  "pypdf>=5.0",
 ]
 
 [project.optional-dependencies]

@@ -25,6 +25,37 @@ def _load_input_release_manifest(path: str | Path) -> ModelInputReleaseManifest:
     return ModelInputReleaseManifest.model_validate_json(path.read_text(encoding="utf-8"))
 
 
+@app.command("build")
+def build_command(
+    source_manifest: str = typer.Option("sources/registry/source_manifest_2025.yaml", "--source-manifest", help="IRS/source registry YAML for CPT ingestion."),
+    tokenization_config: str = typer.Option("configs/modeling/tokenization_v1.yaml", "--tokenization-config"),
+    output: str = typer.Option("artifacts/model_inputs/TaxMoE-Inputs-Qwen3-v0.1", "--output"),
+    project_root: str = typer.Option(".", "--project-root"),
+    chunk_max_chars: int = typer.Option(6000, "--chunk-max-chars"),
+    validation_percent: int = typer.Option(10, "--validation-percent", min=0, max=50),
+):
+    """Build the Stage 4 token-only CPT cache from verified authoritative PDF sources."""
+    from taxmoe.data.stage4_builder import build_cpt_token_cache
+
+    manifest_path, manifest = build_cpt_token_cache(
+        source_manifest=source_manifest,
+        tokenization_config=tokenization_config,
+        output_dir=output,
+        project_root=project_root,
+        chunk_max_chars=chunk_max_chars,
+        validation_percent=validation_percent,
+    )
+    typer.echo(json.dumps({
+        "passed": True,
+        "output": str(Path(output)),
+        "manifest": str(manifest_path),
+        "cache_id": manifest.cache_id,
+        "records": manifest.total_records,
+        "tokens": manifest.total_tokens,
+        "content_hash": manifest.content_hash,
+    }, indent=2))
+
+
 @app.command("verify-cache")
 def verify_cache_command(
     manifest: str = typer.Argument(..., help="Path to a Stage 4 cache manifest JSON."),

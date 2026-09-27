@@ -1,0 +1,10 @@
+objective:
+  type: causal_lm_with_moe_balance
+  label_policy: full_causal
+  normalize_by: supervised_tokens
+  auxiliary_losses:
+    - name: moe_balance
+      version: switch_style_v1
+      coefficient: 0.01
+      layer_aggregation: mean
+      valid_tokens: attention_mask

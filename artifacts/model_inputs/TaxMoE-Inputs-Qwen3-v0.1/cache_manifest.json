@@ -1,0 +1,38 @@
+{
+  "version": "1",
+  "cache_id": "CACHE-QWEN-CPT-63177618b9937e46",
+  "cache_kind": "token_only",
+  "dataset_release_id": "CPT-c1b7881f0f5bdde1656f",
+  "dataset_release_hash": "63177618b9937e4650dde945ebc14e6e4e7958c16184e24c1351e670b14422ab",
+  "tokenizer_manifest_hash": "e4d264c9be1b0f2c637d40eff42d213de68f1d8115c40d068973c60bbfbff4d4",
+  "tokenization_manifest_hash": "03b3a173997ab62b9d5fb08a27a806e267390c56f2367bb5074aca73642b5a1d",
+  "ngram_normalization_hash": null,
+  "ngram_hash_manifest_hash": null,
+  "token_alignment_manifest_hash": null,
+  "ngram_alignment_manifest_hash": null,
+  "files": [
+    {
+      "split": "train",
+      "path": "caches/cpt/token_only/train.arrow",
+      "records": 22,
+      "tokens": 16587,
+      "bytes": 137626,
+      "sha256": "0d516dd8f4850f99421384a4d8205fb69630009cfc7fef7c7255b94f13c1a2b5",
+      "first_record_id": "CPT-SOURCE-2025-1040-P0001-C001",
+      "last_record_id": "CPT-SOURCE-2025-W2-P0011-C001"
+    },
+    {
+      "split": "validation",
+      "path": "caches/cpt/token_only/validation.arrow",
+      "records": 2,
+      "tokens": 843,
+      "bytes": 8986,
+      "sha256": "f355c26bae5a5c9301120353e7bda46027f25261eac1226c8e4a8391359f904a",
+      "first_record_id": "CPT-SOURCE-2025-1099B-P0002-C001",
+      "last_record_id": "CPT-SOURCE-2025-W2-P0004-C001"
+    }
+  ],
+  "total_records": 24,
+  "total_tokens": 17430,
+  "content_hash": "7ea6afffc4143ef6c506a3b60d8a58aab845ed32d2bcd3dec97bf4083ab13d5c"
+}

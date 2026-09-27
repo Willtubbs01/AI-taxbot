@@ -1,0 +1,27 @@
+run:
+  name: TaxMoE-4E-Top2-CPT-v1
+model:
+  parent_release: artifacts/models/releases/TaxDense-0.6B-v0.1
+  upcycle_config: configs/modeling/moe_upcycle_v1.yaml
+  init_artifact: artifacts/models/upcycled/TaxMoE-4E-Top2-Init-v0.1
+data:
+  config: configs/training/dense_cpt_data_v1.yaml
+objective:
+  config: configs/training/moe_cpt_objective_v1.yaml
+optimization:
+  config: configs/training/moe_optimizer_v1.yaml
+checkpointing:
+  config: configs/training/checkpointing_v1.yaml
+evaluation:
+  dev_config: configs/evaluation/eval_dev_v1.yaml
+benchmarking:
+  config: configs/benchmarks/rtx3060ti_moe_v1.yaml
+budget:
+  max_effective_passes: 2.0
+  max_training_tokens: null
+runtime_reference:
+  # Locked from the Stage 6 RTX 3060 Ti profile; CLI flags remain authoritative.
+  precision: bf16
+  sequence_length: 1024
+  microbatch_size: 1
+  gradient_checkpointing: true

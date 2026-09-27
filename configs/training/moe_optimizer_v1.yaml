@@ -1,5 +1,5 @@
-# Conservative full-parameter starting recipe. Re-run the Stage 5 Part 2 hardware
-# profile before production and version this config if you change any semantic value.
+# Stage 6 starting recipe. The architecture is fixed, but production values must
+# be confirmed by the RTX 3060 Ti MoE profile before a frozen model release.
 optimization:
   precision: bf16
   optimizer: adamw

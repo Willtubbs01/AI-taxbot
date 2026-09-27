@@ -1,0 +1,48 @@
+Stage 6 completion update
+=========================
+
+This update intentionally excludes generated artifacts/. Preserve your existing artifacts directory.
+
+Added:
+- Full-model Dense vs initialized-MoE equivalence on a real Stage 4 CPT cache example.
+- Explicit full-logits pass/fail and LM-loss delta pass/fail fields.
+- taxmoe train moe end-to-end Stage 6 CPT command.
+- Deterministic token blocking for a 1024-token training envelope without truncating record tails.
+- Per-layer/per-expert routing health metrics: entropy, assignment fraction, probability mass, top-1 share.
+- routing_health.json and training_result.json output for Stage 6 candidate runs.
+- BF16/non-reentrant gradient checkpointing path reused from the validated benchmark setup.
+
+Recommended next commands after installing this update:
+
+1) Full-model equivalence gate:
+
+taxmoe model validate-upcycle `
+  artifacts/models/releases/TaxDense-0.6B-v0.1 `
+  artifacts/models/upcycled/TaxMoE-4E-Top2-Init-v0.1-rebuild3 `
+  --cache-manifest artifacts/model_inputs/TaxMoE-Inputs-Qwen3-v0.1/cache_manifest.json `
+  --sequence-length 128
+
+2) One-step MoE training smoke test:
+
+taxmoe train moe `
+  artifacts/models/upcycled/TaxMoE-4E-Top2-Init-v0.1-rebuild3 `
+  artifacts/model_inputs/TaxMoE-Inputs-Qwen3-v0.1/cache_manifest.json `
+  --config configs/training/taxmoe_v1.yaml `
+  --output artifacts/training/RUN-MOE-SMOKE `
+  --device cuda `
+  --microbatch-size 1 `
+  --sequence-length 1024 `
+  --max-steps 1 `
+  --gradient-checkpointing
+
+3) Full Stage 6 MoE CPT candidate after the smoke test passes:
+
+taxmoe train moe `
+  artifacts/models/upcycled/TaxMoE-4E-Top2-Init-v0.1-rebuild3 `
+  artifacts/model_inputs/TaxMoE-Inputs-Qwen3-v0.1/cache_manifest.json `
+  --config configs/training/taxmoe_v1.yaml `
+  --output artifacts/training/RUN-MOE-CPT-v0.1 `
+  --device cuda `
+  --microbatch-size 1 `
+  --sequence-length 1024 `
+  --gradient-checkpointing

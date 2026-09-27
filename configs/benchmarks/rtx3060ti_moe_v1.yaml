@@ -1,0 +1,18 @@
+benchmark:
+  warmup_steps: 3
+  measured_steps: 10
+  sequence_lengths: [256, 512, 1024, 2048, 4096]
+  microbatch_sizes: [1, 2, 4]
+  precision: [fp16, bf16]
+  gradient_checkpointing: [false, true]
+  attention_backends: [sdpa, eager]
+
+comparison_variants:
+  - dense
+  - moe_top1
+  - moe_top2
+
+safety:
+  target_vram_headroom_fraction: 0.10
+  require_finite_loss: true
+  require_finite_gradients: true

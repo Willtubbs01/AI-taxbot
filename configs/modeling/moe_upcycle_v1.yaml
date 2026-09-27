@@ -1,0 +1,23 @@
+moe:
+  version: "1"
+  target_layers: [3, 7, 11, 15, 19, 23, 27]
+  num_experts: 4
+  top_k: 2
+  expert_init: exact_copy
+  router:
+    bias: true
+    init_std: 0.01
+    seed: 1701
+    logits_dtype: fp32
+  dispatch:
+    backend: native_v1
+    token_drop: false
+    capacity_limit: null
+    execute_padding: true
+    expert_execution_order: ascending_id
+  balance_loss:
+    enabled: true
+    version: switch_style_v1
+    coefficient: 0.01
+    layer_aggregation: mean
+    valid_tokens: attention_mask

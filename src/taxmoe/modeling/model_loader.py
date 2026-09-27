@@ -41,7 +41,7 @@ def load_model(cfg:ModelLoadConfig, *, device:str|None=None):
     config=load_config(cfg)
     kwargs=dict(revision=cfg.revision,trust_remote_code=cfg.trust_remote_code,low_cpu_mem_usage=cfg.low_cpu_mem_usage)
     dt=resolve_dtype(cfg.dtype)
-    if dt!='auto': kwargs['torch_dtype']=dt
+    if dt!='auto': kwargs['dtype']=dt
     model=AutoModelForCausalLM.from_pretrained(cfg.model_id,**kwargs)
     if device: model.to(device)
     return model,config

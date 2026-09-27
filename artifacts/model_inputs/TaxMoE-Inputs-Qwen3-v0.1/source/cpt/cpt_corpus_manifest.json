@@ -1,0 +1,62 @@
+{
+  "schema_version": "0.1",
+  "corpus_id": "CPT-c1b7881f0f5bdde1656f",
+  "source_manifest_id": "irs_2025_core_v0.1",
+  "source_manifest_hash": "8901d4e89f9809ceeba4f95b10f6b2cd1341fcc9b8d033ff2c3abc9893afaa2e",
+  "tax_year": 2025,
+  "extraction_backend": "pypdf",
+  "chunk_max_chars": 6000,
+  "validation_percent": 10,
+  "records": 24,
+  "train_records": 22,
+  "validation_records": 2,
+  "characters": 60080,
+  "source_summaries": [
+    {
+      "source_id": "SOURCE-2025-W2",
+      "title": "2025 Form W-2",
+      "raw_path": "sources/raw/2025/form_w2.pdf",
+      "sha256": "6a52ad63693de54220a3326b22c4d0fb34f4c25084366537087312975a55ae96",
+      "pages": 11,
+      "records": 11,
+      "characters": 20854
+    },
+    {
+      "source_id": "SOURCE-2025-1040",
+      "title": "2025 Form 1040",
+      "raw_path": "sources/raw/2025/form_1040.pdf",
+      "sha256": "3d31c226df0d189ced80e039d01cf0f8820c1019681a0f0ca6264de277b7e982",
+      "pages": 2,
+      "records": 2,
+      "characters": 10149
+    },
+    {
+      "source_id": "SOURCE-2025-1099B",
+      "title": "2025 Form 1099-B",
+      "raw_path": "sources/raw/2025/form_1099b.pdf",
+      "sha256": "31fb17392add548510bc618d64bb525bb36fb35babb59048d9427d13276cc64e",
+      "pages": 7,
+      "records": 7,
+      "characters": 16233
+    },
+    {
+      "source_id": "SOURCE-2025-8949",
+      "title": "2025 Form 8949",
+      "raw_path": "sources/raw/2025/form_8949.pdf",
+      "sha256": "274513891e4e281d11e14286f14b9df724c24b6030fca0f0681da64fb2e7f525",
+      "pages": 2,
+      "records": 2,
+      "characters": 6717
+    },
+    {
+      "source_id": "SOURCE-2025-SCHEDULE-D",
+      "title": "2025 Schedule D",
+      "raw_path": "sources/raw/2025/schedule_d.pdf",
+      "sha256": "90564c8b7e49280363612639b804d113ebedb516c2e87c70649f29c844da1d2e",
+      "pages": 2,
+      "records": 2,
+      "characters": 6127
+    }
+  ],
+  "content_hash": "63177618b9937e4650dde945ebc14e6e4e7958c16184e24c1351e670b14422ab"
+}
